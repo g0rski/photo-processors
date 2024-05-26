@@ -1,4 +1,148 @@
-Script Name
+# Table of Contents
+- [duplicate_finder](#duplicate_finder)
+- [media_sorter](#media_sorter)
+
+#duplicate_finder
+=======================================
+
+Description
+-----------
+
+This PowerShell script is designed to identify duplicate files within a specified directory. It can either generate a detailed HTML report listing the duplicate files or move the duplicate files to a separate directory within the source directory. The script calculates the hash values of files to determine duplicates.
+
+Parameters
+----------
+
+-   SourceDir (string, Mandatory): The directory path where the script will search for duplicate files.
+-   MoveDuplicates (bool, Optional): If set to `true`, the script will move the duplicate files to a "duplicates" folder within the source directory. If set to `false` or omitted, the script will generate an HTML report.
+
+Usage
+-----
+
+powershell
+
+Copy code
+
+`.\duplicate_finder.ps1 -SourceDir "C:\Path\To\Directory" [-MoveDuplicates $true]`
+
+### Examples
+
+1.  Generate an HTML report of duplicate files in the specified directory:
+
+    powershell
+
+    Copy code
+
+    `.\duplicate_finder.ps1 -SourceDir "C:\Path\To\Directory"`
+
+2.  Move duplicate files to a "duplicates" directory within the specified directory:
+
+    powershell
+
+    Copy code
+
+    `.\duplicate_finder.ps1 -SourceDir "C:\Path\To\Directory" -MoveDuplicates $true`
+
+Functions
+---------
+
+### Find-DuplicateFiles
+
+This function scans the specified directory and computes the hash values for all files. It returns an array of groups of duplicate files.
+
+Parameters:
+
+-   `SourceDir` (string): The directory to scan for duplicate files.
+
+Returns:
+
+-   Array of arrays containing paths of duplicate files.
+
+### Move-Duplicates
+
+This function moves the identified duplicate files to a "duplicates" folder within the specified source directory.
+
+Parameters:
+
+-   `DuplicateFiles` (array): An array of groups of duplicate files.
+-   `SourceDir` (string): The source directory.
+
+### Generate-Report
+
+This function generates an HTML report listing all duplicate files, including previews for images and videos.
+
+Parameters:
+
+-   `DuplicateFiles` (array): An array of groups of duplicate files.
+-   `SourceDir` (string): The source directory.
+
+Detailed Process
+----------------
+
+1.  Trim Input Path:
+
+    powershell
+
+    Copy code
+
+    `$SourceDir = $SourceDir.Trim()`
+
+2.  Find Duplicate Files:
+
+    -   Recursively scan all files in the specified directory.
+    -   Compute hash values for each file.
+    -   Group files by their hash values to identify duplicates.
+3.  Move Duplicates or Generate Report:
+
+    -   If `MoveDuplicates` is set to `true`, call `Move-Duplicates` function to move duplicates.
+    -   If `MoveDuplicates` is `false` or omitted, call `Generate-Report` function to create an HTML report.
+
+### Progress Indicator
+
+While computing file hashes, a progress bar is displayed to indicate the progress of the operation.
+
+Output
+------
+
+-   HTML Report:
+
+    -   Generated in the source directory with the naming format `report_yyyyMMdd_HHmmss.html`.
+    -   Includes a table listing original and duplicate files with previews for image and video files.
+-   Moved Files:
+
+    -   Duplicate files are moved to a subdirectory named "duplicates" within the source directory.
+    -   Console output indicates the source and destination of moved files.
+
+Notes
+-----
+
+-   Ensure the script has the necessary permissions to read from and write to the specified directories.
+-   The script supports common image and video formats for previews in the HTML report.
+-   For non-media files, the content is displayed as plain text in the report.
+
+Example Output
+--------------
+
+text
+
+Copy code
+
+`Duplicate files moved successfully to 'duplicates' directory in 'C:\Path\To\Directory'.`
+
+Or, upon generating the report:
+
+text
+
+Copy code
+
+`Report generated at: C:\Path\To\Directory\report_20240526_123456.html`
+
+License
+-------
+
+This script is provided "as-is" without warranty of any kind. Use at your own risk.
+
+media_sorter
 ===========
 
 Purpose
